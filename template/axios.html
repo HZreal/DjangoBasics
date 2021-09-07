@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axiox_request</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    {#    导入axios   #}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    {#  vue语法会和Django、flask模板语言冲突，这里jinja2没有冲突  #}
+    <div id="app">
+        <span>{{ message }}</span>
+        <br>
+        <button @click="axios_get">点击发送基于get的axios请求</button>
+        <br>
+        <button @click="axios_post">点击发送基于post的axios请求</button>
+
+    </div>
+
+</body>
+
+<script type="text/javascript">
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello huang sir',
+            },
+
+            methods:{
+                {#  发送基于get的axios请求  #}
+                axios_get:function (){
+                    let url = 'http://localhost:8000/recv_axios/?username=huangzhen&password=123456'
+                    {#  then 和 catch 使用箭头函数  #}
+                    axios.get(url, {
+                        {#    请求头信息   #}
+                        responseType: 'json',
+                    }).then((response) => {
+                        {#  请求成功的回调函数，response接收返回的对象：含有config,data,headers,request,status等信息，可console查看  #}
+                        console.log(response)
+                        console.log(response.data)              {#  即是{"username": "huangzhen", "password": "123456"}  #}
+                    }).catch((error) => {
+                        {#  失败的回调函数  #}
+                        console.log(error)
+                    })
+                },
+
+                {#  发送基于post的axios请求,目前需要关闭Django的CSRF防护  #}
+                axios_post:function (){
+                    let url = 'http://localhost:8000/recv_axios/'
+                    {#  post第一个参数是url,第二个参数是请求体  #}
+                    axios.post(url, {
+                        'name': this.message,
+                        'age': '22'
+                    }).then((response) => {
+                        console.log(response)
+                        console.log(response.data)
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }
+
+            },
+
+        });
+
+    </script>
+
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form action="" method="post">
+{#        {% csrf_token %}      #}
+{#        Django模板会自动将{% csrf_token %}在浏览器中渲染成：<input type="hidden" name="csrfmiddlewaretoken" value="oaJuzO80vTDv4ITokGemla6I5BzgzB6GXhMT4kkfAfB1uhCQ0JrYfRDEjAqoUdnS">#}
+
+{#        jinja2模板不直接支持{% csrf_token %}，支持下面写法：#}
+{#        post请求时Django会因为CSRF保护自动拦截，这里设置csrf_token，用于csrf中间件验证     #}
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+        <p><label>用户名：</label><input type="text" name="username" placeholder="请输入用户名"></p>
+        <p><label>密码：</label><input type="password" name="password" placeholder="请输入密码"></p>
+        <p><label>验证码：</label><input type="text" name="input_code" placeholder="请输入验证码"></p>
+        <input type="submit" value="登录">
+
+
+    {#        在这里我用来存储服务器生成的随机码(for fun)      服务器生成的随机码存在了cookie中         #}
+        <input type="hidden" name="ms_csrf_token" value="{{ ms_csrf_token }}">
+
+
+        {% if tag==0 %}                {# 用户名密码不正确时弹窗提示，并转到登录页面 #}
+            {{ desc|safe }}
+{#            {{ safe(desc) }}#}
+        {% elif tag==1 %}              {# 验证码不正确时弹窗提示，并转到登录页面 #}
+             {{ desc|safe }}
+        {% endif %}
+    </form>
+
+</body>
+</html>

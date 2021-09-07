@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学习Django</title>
+    <style>
+        a{
+            color:red
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script>
+        $(function(){
+            alert('Hi, Django')
+        });
+    </script>
+</head>
+
+<body>
+        {# 模板语言基本语法 #}
+        <a href="http://www.baidu.com">{{username}}打开百度</a>
+        <hr>
+        <!--变量使用：双大括号-->
+        我的年龄是{{ age }}
+
+        <hr>
+        <!--列表取值用下标索引：list.index-->
+        我的朋友是{{ friends }}
+        我的基友是{{ friends.2 }}
+
+        <hr>
+        <!--字典取值：dict.key-->
+        我的第一年月薪是{{ money.2019 }}
+
+        <hr>
+        <!--流程控制语法：大括号加%-->
+        <!-- for流程控制 -->
+        <ul>
+        {% for friend in friends %}
+            <li>{{ forloop.counter }} {{ friend }}</li>                <!-- forloop是一个对象 -->
+        {% endfor %}
+        </ul>
+
+        <hr>
+        <!-- if流程控制，注意:运算符> < != 等等，两边必须为空格，不能写age>12-->
+        {% if age > 12  %}
+            大于12岁
+        {% else %}
+            小于12岁
+        {% endif %}
+
+        <hr>
+        {#   过滤器(本质就是函数)语法： 变量|过滤器:参数   注意英文冒号后不能有空格  #}
+        我的生日是{{ birthday|date:'Y年 m月 d日' }}
+
+        <hr>
+        我的简介是{{ desc }}                            {# 不会执行，直接显示 #}
+        <hr>
+        我的简介是{{ desc|safe }}                       {# safe告知此变量安全，可以执行。于是模板会执行对应js代码 #}
+
+        <hr>
+        未定义的变量：{{ catr|default:'变量默认值----' }}       {# 设置默认值，若变量不存在则返回默认值 #}
+
+        <hr>
+        我有{{ friends|length }}个朋友                  {# 返回字符串包含字符个数，或列表元组字典的元素个数 #}
+
+        <hr>
+        {# 模板语言的单行注释 #}
+        {% comment %}
+        模板语言的多行注释
+        {% endcomment %}
+
+
+
+</body>
+</html>
+
+
+
+<!--通过模板语言将context内容取出对html进行渲染-->
+    <!--<a href="http://www.baidu.com">{{name}}打开百度</a>-->
+    <!--<ul>-->
+        <!--{% for book in books %}-->
+            <!--<li>{{ book.name }}</li>-->
+        <!--{% endfor %}-->
+    <!--</ul>-->

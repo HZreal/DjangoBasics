@@ -1,0 +1,17 @@
+{# 模板继承： 继承base.html #}
+{% extends 'base.html' %}
+
+
+
+{% block title %}detail网页标题{% endblock %}
+
+{# 没有涉及父类的header部分，自动继承过来 #}
+
+{# 重写父类的main部分 #}
+{% block main %}
+    <a href="http://www.baidu.com">点我</a>
+{% endblock main %}
+
+
+{# 不想使用父类的footer部分，只需将其中设为空即可，实际就是重写 #}
+{% block footer %}{% endblock %}

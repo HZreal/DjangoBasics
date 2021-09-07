@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学习Django</title>
+    <style>
+        a{
+            color:red
+        }
+    </style>
+
+</head>
+
+<body>
+
+        <a href="http://www.baidu.com">{{username}}打开百度</a>
+        <hr>
+        我的年龄是{{ age }}
+
+        <hr>
+        我的朋友是{{ friends }}
+        我的基友是{{ friends.2 }}
+
+        <hr>
+{#        jinja2中对字典的取值和python语法相同#}
+        我的2019年月薪是{{ money['2019'] }}
+
+        <hr>
+        <ul>
+        {% for friend in friends %}
+            {# <li>{{ forloop.counter }} {{ friend }}</li> #}
+            <li>{{ loop.index }} {{ friend }}</li>
+        {% endfor %}
+        </ul>
+
+        <hr>
+        {% if age > 12  %}
+            大于12岁
+        {% else %}
+            小于12岁
+        {% endif %}
+
+        {# pycharm默认引擎是Django的， #}
+
+        <hr>
+{#        jinja2中的过滤器直接用函数     #}
+        我的生日是{{ date(birthday, 'Y年 m月 d日') }}
+
+        <hr>
+        我的简介是{{ desc }}                           {# 不会执行，直接显示 #}
+        <hr>
+        我的简介是{{ desc|safe }}                         {# safe告知此变量安全，可以执行。于是模板会执行对应js代码 #}
+
+        <hr>
+        {# 未定义的变量：{{ catr|default:'变量默认值----' }} #}
+
+        <hr>
+        我有{{ friends|length }}个朋友
+
+        <hr>
+        {# jinja2只有单行注释 #}
+
+
+</body>
+</html>
+
+
+
