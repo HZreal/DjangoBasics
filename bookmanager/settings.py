@@ -60,9 +60,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',            # session 已注册
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'book',                          # 直接写子应用名
+    # 'book',                           # 直接写子应用名
     'book.apps.BookConfig',
-    'pay.apps.PayConfig',           # 本质还是pay.apps.PayConfig = pay
+    'pay.apps.PayConfig',               # 本质还是pay.apps.PayConfig  Django启动应用读取的是每个app的Appconfig
     'login.apps.LoginConfig',
 
 ]
