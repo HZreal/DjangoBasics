@@ -2,8 +2,9 @@
 # Create your views here.
 
 from django.shortcuts import render
-from django.http import HttpRequest,HttpResponse
+from django.http import HttpRequest, HttpResponse
 from book.models import BookInfo, PersonInfo
+
 
 # 视图函数就是python函数：
 #           函数的第一个参数就是请求request(HttpRequest的实例对象)
@@ -32,16 +33,11 @@ def index(request):
     return HttpResponse('index')
 
 
-
 '''
 Django的manage工具提供了shell命令，类似于ipython,帮助我们配置好当前工程的运行环境(如连接好数据库等),
 使我们方便在终端测试查看内容
 执行语句 python manage.py shell进入shell模式， 然后执行python语句获取结果
 '''
-
-
-
-
 
 # 模型类里定义了objects，如BookInfo里隐藏着objects = BookInfoManager()
 # 调用objects实际就是 初始化BookInfoManager对象，内含各种操作方法，如save()
@@ -58,11 +54,10 @@ book1.save()
 # 利用管理类objects(对模型的增删改查),也有返回值，但内部封装了save方法，直接入库
 BookInfo.objects.create(name='Django', pub_date='2019-8-24')
 
-
 # 修改数据
 # 方式一：
 # 1.先查询数据 select * from bookinfo where id = 1
-book2 = BookInfo.objects.get(id = 1)
+book2 = BookInfo.objects.get(id=1)
 # 2.修改数据
 book2.read_count = 20
 # 3.调用save()方法存储到库
@@ -70,26 +65,24 @@ book2.save()
 
 # 方式二：直接修改入库
 # filter()过滤，相当于where条件
-BookInfo.objects.filter(id = 1).update(read_count=100, comment_count=200)
-
+BookInfo.objects.filter(id=1).update(read_count=100, comment_count=200)
 
 # 删除数据
 # 方式一：
 # 1.先查询获取
-book3 = BookInfo.objects.get(id = 6)
+book3 = BookInfo.objects.get(id=6)
 # 2.再删除
 book3.delete()
 # book.save() 删除操作不需要调用save
 
 # 方式二：直接删除
-BookInfo.objects.filter(id = 6).delete()
-
+BookInfo.objects.filter(id=6).delete()
 
 # 查询数据(大多都是查询数据)
 # 一、基本查询：
 # get()获取单一对象
 try:
-    book4 = BookInfo.objects.get(id = 1)
+    book4 = BookInfo.objects.get(id=1)
 # except Exception as e:
 #     pass
 except BookInfo.DoesNotExist:
@@ -105,18 +98,18 @@ BookInfo.objects.count()
 # 二、条件查询
 # 语法：  filter(字段名__运算符=值)
 # filter()筛选过滤，返回符合条件的结果，返回的是一个列表
-BookInfo.objects.filter(id__exact=1)       # exact精确的，就是等于
+BookInfo.objects.filter(id__exact=1)  # exact精确的，就是等于
 # 等同于BookInfo.objects.filter(id=1)
-BookInfo.objects.filter(name__contains='湖')      # contains 表示名字包含'湖'
-BookInfo.objects.filter(name__endswith='部')      # endswith 表示名字以'部'结尾
-BookInfo.objects.filter(name__isnull=True)        # isnull 表示名字为空
-BookInfo.objects.filter(id__in=[1,3,5])           # in 表示id为1或3或5
-BookInfo.objects.filter(id__gt=3)                 # gt即greater than 表示id大于3
-BookInfo.objects.filter(id__gte=3)                # gte即greater than equal 表示id大于等于3
-BookInfo.objects.filter(id__lt=3)                 # lt即less than 表示id小于3
-BookInfo.objects.filter(id__lte=3)                # lte 表示id小于等于3
-BookInfo.objects.filter(pub_date__year='1980')   # __year 表示发表日期是1980年的，date类型中还有__day __month
-BookInfo.objects.filter(pub_date__gt='1980-1-1')     # 表示发表日期是1980年一月一号以后的，格式必须是YY-MM-DD
+BookInfo.objects.filter(name__contains='湖')  # contains 表示名字包含'湖'
+BookInfo.objects.filter(name__endswith='部')  # endswith 表示名字以'部'结尾
+BookInfo.objects.filter(name__isnull=True)  # isnull 表示名字为空
+BookInfo.objects.filter(id__in=[1, 3, 5])  # in 表示id为1或3或5
+BookInfo.objects.filter(id__gt=3)  # gt即greater than 表示id大于3
+BookInfo.objects.filter(id__gte=3)  # gte即greater than equal 表示id大于等于3
+BookInfo.objects.filter(id__lt=3)  # lt即less than 表示id小于3
+BookInfo.objects.filter(id__lte=3)  # lte 表示id小于等于3
+BookInfo.objects.filter(pub_date__year='1980')  # __year 表示发表日期是1980年的，date类型中还有__day __month
+BookInfo.objects.filter(pub_date__gt='1980-1-1')  # 表示发表日期是1980年一月一号以后的，格式必须是YY-MM-DD
 
 # get() 返回的是一个单一对象
 BookInfo.objects.get(id__exact=1)
@@ -135,13 +128,12 @@ BookInfo.objects.values('pub_date', 'read_count').order_by('pub_date')
 # 与values() 类似，只是在迭代时返回的是元组而不是字典。每个元组包含传递给values_list() 调用的字段的值 —— 所以第一个元素为第一个字段
 BookInfo.objects.values_list('id').order_by('id')
 
-
 # 三、一个表中两个字段比较的查询，用F对象
 # 语法形式：  filter(字段名__运算符=F('字段名'))
 from django.db.models import F
-BookInfo.objects.filter(read_count__gt=F('comment_count'))        # 表示阅读量大于评论量
-BookInfo.objects.filter(read_count__gt=F('comment_count')*2)        # 表示阅读量大于2倍评论量
 
+BookInfo.objects.filter(read_count__gt=F('comment_count'))  # 表示阅读量大于评论量
+BookInfo.objects.filter(read_count__gt=F('comment_count') * 2)  # 表示阅读量大于2倍评论量
 
 # 四、一个表中多个条件的查询  用Q对象
 # 需求： id>2且阅读量>40
@@ -155,22 +147,20 @@ BookInfo.objects.filter(id__gt=2, read_count__gt=40)
 #    逻辑与   Q()&Q() ...
 #    逻辑非  ~Q()
 from django.db.models import Q
-BookInfo.objects.filter(Q(id__gt=2)|Q(read_count__gt=40))
-BookInfo.objects.filter(Q(id__gt=2)&Q(read_count__gt=40))
-BookInfo.objects.filter(~Q(id=2))
 
+BookInfo.objects.filter(Q(id__gt=2) | Q(read_count__gt=40))
+BookInfo.objects.filter(Q(id__gt=2) & Q(read_count__gt=40))
+BookInfo.objects.filter(~Q(id=2))
 
 # 五、聚合函数   Sum, Max, Min, Avg, Count
 # 语法形式：  aggragte(Xxx('字段'))                  # aggragte意思是聚集汇总
 from django.db.models import Sum, Avg, Max, Min, Count
-BookInfo.objects.aggregate(Sum('read_count'))       # 返回字典{'read_count__sum': 214}
 
+BookInfo.objects.aggregate(Sum('read_count'))  # 返回字典{'read_count__sum': 214}
 
 # 六、排序(开发使用较多)
-BookInfo.objects.all().order_by('read_count')       # 升序
-BookInfo.objects.all().order_by('-read_count')      # 降序
-
-
+BookInfo.objects.all().order_by('read_count')  # 升序
+BookInfo.objects.all().order_by('-read_count')  # 降序
 
 # 七、基本关联查询(两个表联表查询)--------------------
 # 思维总结：此方法先获取条件表，再通过条件表的属性获取查询表。而条件表的属性对于主表而言是'从表名小写__set'，对于从表而言是'外键名'
@@ -182,7 +172,7 @@ BookInfo.objects.all().order_by('-read_count')      # 降序
 # ①.先查询书籍
 book6 = BookInfo.objects.get(id=1)
 # ②.再根据书籍关联查询人物信息
-person1 = book6.personinfo_set     # 返回人物对象集
+person1 = book6.personinfo_set  # 返回人物对象集
 person1.all()
 
 # 2.已知条件从表关联查询主表    如通过人物查询书籍
@@ -191,7 +181,7 @@ person1.all()
 # ①.先查询人物
 person2 = PersonInfo.objects.get(id=1)
 # ②.再根据人物关联查询书籍信息
-book7 = person2.book_id     # 返回书籍对象
+book7 = person2.book_id  # 返回书籍对象
 book7.name
 
 # 关联查询的筛选--------------------
@@ -208,7 +198,6 @@ BookInfo.objects.filter(personinfo__description__contains='八')
 PersonInfo.objects.filter(book_id__name__exact='天龙八部')
 PersonInfo.objects.filter(book_id__read_count__gt=50)
 
-
 # 八、查询结果集Queryset--------表示从数据库中获取的对象集合
 # 以下方法均返回查询集
 # all()：返回所有数据。
@@ -217,8 +206,8 @@ PersonInfo.objects.filter(book_id__read_count__gt=50)
 # order_by()：对结果进行排序
 # 查询集特点：
 # 1.惰性执行：创建查询集不会访问数据库，直到调用数据时，才会访问数据库
-books = BookInfo.objects.all()                           # 此时没有查询数据库
-for book in books:                                       # 此时用到books才会去查询数据库
+books = BookInfo.objects.all()  # 此时没有查询数据库
+for book in books:  # 此时用到books才会去查询数据库
     print(book)
 
 # 2.缓存：使用同一个查询集，第一次使用时会发生数据库的查询，然后Django会把结果缓存下来，再次使用这个查询集时会使用缓存的数据，减少了数据库的查询次数
@@ -228,89 +217,24 @@ list = [book.id for book in BookInfo.objects.all()]
 list = [book.id for book in BookInfo.objects.all()]
 
 # 这样写会缓存
-books = BookInfo.objects.all()          # books变量保存在内存中
+books = BookInfo.objects.all()  # books变量保存在内存中
 [book.id for book in books]
 # 再次执行时不会去数据库中查询，因为已缓存到内存，从实时日志可见
 [book.id for book in books]
 [book.id for book in books]
-
 
 # 限制查询集----------------------比如列举正在热播显示前六个电视剧
 # 可以对查询集进行取下标或切片操作，等同于sql中的limit和offset子句
 BookInfo.objects.all()[0]
 BookInfo.objects.all()[0:2]
 
-
 # 九、分页
 from django.core.paginator import Paginator
+
 # Paginator是一个类。参数object_list指结果集, per_page指每页的记录条数
-books = BookInfo.objects.all()     # 6条数据
-p = Paginator(books, 2)            # 每页2条
+books = BookInfo.objects.all()  # 6条数据
+p = Paginator(object_list=books, per_page=2)  # 每页2条
 # 获取第几页的数据
-books_page1 = p.page(1)            # 返回一个列表，即一页
-books_page1[0]                     # 第1页第1条数据
-books_page1[1]                     # 第1页第2条数据
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+books_page1 = p.page(1)  # 返回一个列表，即一页
+books_page1[0]  # 第1页第1条数据
+books_page1[1]  # 第1页第2条数据
