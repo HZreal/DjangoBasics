@@ -53,7 +53,6 @@ book1.save()
 # 方式二：
 # 利用管理类objects(对模型的增删改查),也有返回值，但内部封装了save方法，直接入库
 BookInfo.objects.create(name='Django', pub_date='2019-8-24')
-
 # 修改数据
 # 方式一：
 # 1.先查询数据 select * from bookinfo where id = 1
@@ -88,7 +87,7 @@ try:
 except BookInfo.DoesNotExist:
     pass
 
-# all()获取对象集，返回的是一个列表，是一个Queryset对象
+# all()获取对象集，返回的是一个列表，是一个Queryset对象，迭代时每一个为一个模型实例
 book5 = BookInfo.objects.all()
 
 # count()获取数据条数

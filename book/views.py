@@ -1,6 +1,5 @@
 # 和视图相关: 实现业务逻辑
-
-
+from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.middleware.csrf import get_token
@@ -102,7 +101,7 @@ def detail_6(request):
 
 # detail_7视图函数接收请求头header中的数据
 # 可以在postman的Headers中发送自定义头部信息，并通过META字典获取
-def detail_7(request):
+def detail_7(request: WSGIRequest):
     meta = request.META                            # 返回字典,得到系统的数据
     # 常见的请求头有： CONTENT_LENGTH， CONTENT_TYPE， HTTP_ACCEPT， HTTP_ACCEPT_ENCODING， HTTP_ACCEPT_LANGUAGE， HTTP_HOST ...
     content_type = meta['CONTENT_TYPE']
@@ -117,7 +116,7 @@ def detail_7(request):
     print(request.FILES)                            # 一个类似于字典的对象，包含所有的上传文件
     print(request.get_host())
     print(request.get_port())
-    # 更多Ctrl+b详看HttpRequest对象
+    # 更多Ctrl+b详看WSGIRequest/HttpRequest对象
 
     return HttpResponse('detail_7视图函数接收请求头header中的数据-------------')
 

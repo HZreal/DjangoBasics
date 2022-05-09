@@ -1,4 +1,4 @@
-from book import views
+from book import views, view_plus, views_model_operate
 
 # 早期版本下用url
 # from django.conf.urls import url
@@ -70,7 +70,14 @@ urlpatterns = [
     path('axios/', views.AxiosView.as_view()),
 
     # axios请求接收
-    path('recv_axios/', views.ReceiveAxiosView.as_view())
+    path('recv_axios/', views.ReceiveAxiosView.as_view()),
+
+
+
+    # view_plus
+    path('wsgirequest/properties', view_plus.LearnWSGIRequest_View.as_view()),
+
+
 ]
 
 

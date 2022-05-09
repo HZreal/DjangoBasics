@@ -35,10 +35,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-v928^-_cr7+h06j=n$12*d(vx3vho6)-e-x&-xev(7*6a%u+e!'
 
-# 开发者调试用，部署上线后则改为False
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+DEBUG = True   # 开发者调试用，后端出错会直接返回真实具体的错误信息给前端，代码修改自动重启，支持静态文件访问
+# DEBUG = False   # 生产模式使用，后端出错前端只会显示Internal Server Error 状态码500
 
 
 # 允许访问后端的主机列表，默认为空仅支持本机访问
@@ -50,19 +50,18 @@ ALLOWED_HOSTS = ['localhost',
                  '192.168.0.103',
                  ]
 
-
 # Application definition
 # 安装注册子应用
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',            # session 已注册
+    'django.contrib.sessions',  # session 已注册
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'book',                           # 直接写子应用名
     'book.apps.BookConfig',
-    'pay.apps.PayConfig',               # 本质还是pay.apps.PayConfig  Django启动应用读取的是每个app的Appconfig
+    'pay.apps.PayConfig',  # 本质还是pay.apps.PayConfig  Django启动应用读取的是每个app的Appconfig
     'login.apps.LoginConfig',
 
 ]
@@ -70,7 +69,7 @@ INSTALLED_APPS = [
 # 中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',               # Django自带session中间件
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Django自带session中间件
     'django.middleware.common.CommonMiddleware',
     # Django默认开启了CSRF防护，会对POST等请求方式进行CSRF防护验证，在测试时可以关闭CSRF防护机制
     # 'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,7 +83,6 @@ MIDDLEWARE = [
 
 ]
 
-
 # settings.py文件中，可以设置session数据的存储方式如下
 # Django对session的默认存储方式，可不写
 # SESSION_ENGINE='django.contrib.sessions.backends.db'
@@ -95,9 +93,9 @@ MIDDLEWARE = [
 # 设置为redis存储：以后session不再保存在系统django_session表中，而是保存在redis库
 CACHES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",                    # 去找中间件
+        "BACKEND": "django_redis.cache.RedisCache",  # 去找中间件
         # "LOCATION": "redis://127.0.0.1:6379/1",                      # 本机redis的1号库
-        "LOCATION": "redis://192.168.94.131:6379/1",                   # 远程redis的1号库
+        "LOCATION": "redis://192.168.94.131:6379/1",  # 远程redis的1号库
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -106,10 +104,8 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-
 # 此工程的URL配置入口，默认是工程名.urls  可修改但一般不改
 ROOT_URLCONF = 'bookmanager.urls'
-
 
 # 和模板相关的配置信息
 TEMPLATES = [
@@ -125,7 +121,7 @@ TEMPLATES = [
             # 'environment': 'jinja2.Environment',
             # 指定jinja2的环境，在哪创建就写对应路径
             # 'environment': 'book.jinja2_env.environment',            # 在book应用里
-            'environment': 'jinja2_env.environment',                   # 在工程里
+            'environment': 'jinja2_env.environment',  # 在工程里
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -152,9 +148,7 @@ TEMPLATES = [
 
 ]
 
-
 WSGI_APPLICATION = 'bookmanager.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -166,16 +160,15 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',           # BASE_DIR是此工程路径，与'db.sqlite3'拼接即是数据库sqlite3的路径
 
-        'ENGINE': 'django.db.backends.mysql',           # 指定数据库引擎为mysql
-        'HOST':'192.168.94.131',
-        'PORT':'3306',
-        'USER':'huangzhen',
-        'PASSWORD':'root',
-        'NAME': 'bookmanage',            # 指定数据库名
+        'ENGINE': 'django.db.backends.mysql',  # 指定数据库引擎为mysql
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': 'root123456',
+        # 'NAME': 'bookmanage',  # 指定数据库名
+        'NAME': 'test',  # 指定数据库名
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -195,7 +188,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -213,7 +205,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 # Django是通过STATIC_URL区分动态资源和静态资源
@@ -223,10 +214,8 @@ STATIC_URL = '/static/'
 
 # 静态文件路由，告知系统静态文件路径
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',             # os.path.join(BASE_DIR, 'static')
+    BASE_DIR / 'static',  # os.path.join(BASE_DIR, 'static')
 ]
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
