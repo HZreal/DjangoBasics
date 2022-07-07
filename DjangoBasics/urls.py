@@ -2,7 +2,7 @@
 
 # ROOT_URLCONF是进入本项目的入口URL,在setting.py中
 
-"""bookmanager URL Configuration (此文件是本项目的URL)
+"""DjangoBasics URL Configuration (此文件是本项目的URL)
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -83,7 +83,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(('book.urls', 'book'), namespace='book')),          # 必须指定 app_name
+    path('book/', include(('book.urls', 'book'), namespace='book')),          # 必须指定 app_name
     # path('pay/', include('pay.urls')),
     # path('login/', include('login.urls'))
 ]

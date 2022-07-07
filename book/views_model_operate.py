@@ -48,7 +48,7 @@ Django的manage工具提供了shell命令，类似于ipython,帮助我们配置�
 # 1.初始化类，返回生成的对象
 book1 = BookInfo(name='PyLearn', pub_date='2020-5-5')
 # 2.需要手动调用save()方法入库
-book1.save()
+# book1.save(using='default')            # 指定对某个数据库的写操作
 
 # 方式二：
 # 利用管理类objects(对模型的增删改查),也有返回值，但内部封装了save方法，直接入库
@@ -57,6 +57,7 @@ BookInfo.objects.create(name='Django', pub_date='2019-8-24')
 # 方式一：
 # 1.先查询数据 select * from bookinfo where id = 1
 book2 = BookInfo.objects.get(id=1)
+# book2 = BookInfo.objects.using('default').get(id=1)        # 指定对某个数据库的读操作
 # 2.修改数据
 book2.read_count = 20
 # 3.调用save()方法存储到库

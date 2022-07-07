@@ -1,2 +1,2 @@
-# bookmanager
+# DjangoBasics
 learn foundation for django

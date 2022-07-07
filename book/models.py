@@ -138,10 +138,50 @@ class PersonInfo(models.Model):
 
 
 
+class Comment(models.Model):
+    title = models.CharField(max_length=128)
+    text = models.TextField()
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE)        # 评论系统：外键自己引用自己
+    # .....
 
 
+# 直接执行SQl的两种方式：
+# 一、模型的管理器manager.raw()方法可以直接执行SQL，返回RawQuerySet Object
+BookInfo.objects.raw(raw_query='select * from tb_book where id=%s', params={'id': 1})
 
 
+# 由于manager.raw()总是对应一个模型，实际中的查询涉及更多的模型表
+# 二、django.db.connection
+from django.db import connection
+
+def dict_fetchall(cursor):
+    """
+    将查询的数据行列表的每一行与其数据库字段一一对应，形成一个字典，最后返回字典列表
+    """
+    # cursor.description返回游标活动状态，或者说表头信息，为二元元祖，
+    # 元祖内每个元祖即一个表头字段的信息，包含7个元素：(name, type_code, display_size, internal_size, precision, scale, null_ok)，其中第一个元素为字段名
+    print('description==================', cursor.description)             # (('name', 253, None, 10, 10, 0, False), ('age', 1, None, 4, 4, 0, True), ('height', 246, None, 5, 5, 2, True))
+    columns = [col[0] for col in cursor.description]
+    print('columns======================', columns)                        # ['name', 'age', 'height']
+    res_dict_list = [dict(zip(columns, row)) for row in cursor.fetchall()]     # row即 ['黄真', '24', '170'],    dict(zip(columns, row))即 {'name': '黄真', 'age': 24, 'height': 170}
+    return res_dict_list                                        # 字典列表，使数据库表头字段与值对应，形成一行为一个对象  [{'name': '黄真', 'age': 24, 'height': Decimal('1.80')}, {'name': '葛临婧', 'age': 24, 'height': Decimal('1.80')},  ...{}, ...]
+
+with connection.cursor() as cursor:
+    cursor.execute('sql', 'params')
+    # row = cursor.fetchone()
+    # rows = cursor.fetchall()
+
+    # 解析查询结果
+    res_dict_list = dict_fetchall(cursor)
+    print(res_dict_list)
+
+# 指定某个数据库进行操作
+with connection['default'].cursor() as cursor:
+    cursor.execute('sql')
+
+# 执行存储过程
+with connection.cursor() as cursor:
+    cursor.callproc('test_procedure', [1, 'test'])
 
 
 
